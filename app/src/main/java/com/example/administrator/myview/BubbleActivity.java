@@ -16,4 +16,10 @@ public class BubbleActivity extends AppCompatActivity {
         mBubbleView = findViewById(R.id.bubbleView);
         mBubbleView.startAnimation();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mBubbleView.stop();
+    }
 }

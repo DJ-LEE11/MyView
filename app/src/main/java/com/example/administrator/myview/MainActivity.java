@@ -17,18 +17,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initView() {
         findViewById(R.id.tvBubble).setOnClickListener(this);
+        findViewById(R.id.tvCanWave).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.tvBubble:
-                    goTo(BubbleActivity.class);
+                goTo(BubbleActivity.class);
+                break;
+            case R.id.tvCanWave:
+                goTo(CanWaveActivity.class);
                 break;
         }
     }
 
-    private void goTo(Class clazz){
+    private void goTo(Class clazz) {
         new IntentUtils.Builder(this)
                 .to(clazz)
                 .build()

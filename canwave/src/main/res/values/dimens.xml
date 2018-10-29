@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 瓶子 -->
+    <dimen name="pair_can_layout_height">243dp</dimen>
+    <dimen name="pair_can_width">126dp</dimen>
+    <dimen name="pair_can_height">162dp</dimen>
+    <dimen name="pair_can_margin_right">-126dp</dimen>
+    <dimen name="pair_cap_width">64dp</dimen>
+    <dimen name="pair_cap_height">29dp</dimen>
+    <dimen name="pair_cap_margin_top">72dp</dimen>
+    <dimen name="pair_music_note_bg_width">126dp</dimen>
+    <dimen name="pair_music_note_bg_height">95dp</dimen>
+</resources>
