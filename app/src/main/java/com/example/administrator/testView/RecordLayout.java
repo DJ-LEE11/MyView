@@ -9,8 +9,10 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.administrator.myview.R;
 
@@ -27,6 +29,14 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
     private CountDownView mCountRecordView;
     private CountDownView mCountPlayView;
     private TextView mTvTime;
+
+    private LinearLayout mLlNewRecord;
+    private TextView mIftNewRecord;
+    private TextView mTvNewRecordText;
+    private LinearLayout mLlAchieve;
+    private TextView mIftAchieve;
+    private TextView mTvAchieveText;
+
     private Context mContext;
     private RecordStatus mCurrentStatus = RecordStatus.INITIAL;
 
@@ -80,6 +90,14 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
         mIftRecord = inflate.findViewById(R.id.iftRecord);
         mScaleBg = inflate.findViewById(R.id.rlScaleBg);
         mTvTime = inflate.findViewById(R.id.tvTime);
+        mLlNewRecord = inflate.findViewById(R.id.llNewRecord);
+        mIftNewRecord = inflate.findViewById(R.id.iftNewRecord);
+        mTvNewRecordText = inflate.findViewById(R.id.tvNewRecordText);
+
+        mLlAchieve = inflate.findViewById(R.id.llAchieve);
+        mIftAchieve = inflate.findViewById(R.id.iftAchieve);
+        mTvAchieveText = inflate.findViewById(R.id.tvAchieveText);
+
         mCountRecordView = inflate.findViewById(R.id.countDownRecordView);
         mCountPlayView = inflate.findViewById(R.id.countDownPlayView);
         mCountRecordView.setLoadingTime(mMaxSecond);
@@ -89,6 +107,9 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
 
     @SuppressLint("ClickableViewAccessibility")
     private void initListener() {
+        mTvTime.setOnClickListener(this);
+        mIftNewRecord.setOnClickListener(this);
+        mIftAchieve.setOnClickListener(this);
         mRecordLayout.setOnClickListener(this);
         mRecordLayout.setOnTouchListener(new OnTouchListener() {
             float startX = 0;
@@ -267,7 +288,7 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
     public synchronized void showPlay() {
         if (mCurrentStatus == RecordStatus.COMPLETE){
             mCurrentStatus = RecordStatus.PLAY;
-            mIftRecord.setText("播放");
+            mIftRecord.setText("播放中");
             mCountPlayView.startPlayRecord(mRecordTime);
         }
     }
@@ -410,6 +431,18 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
                 showPlayResume();
                 return;
             }
+        }
+        if (id == R.id.tvTime){
+            mIftNewRecord.setEnabled(false);
+            mTvNewRecordText.setEnabled(false);
+            mIftAchieve.setEnabled(false);
+            mTvAchieveText.setEnabled(false);
+        }
+        if (id == R.id.iftNewRecord){
+            Toast.makeText(mContext,"重录",Toast.LENGTH_SHORT).show();
+        }
+        if (id == R.id.iftAchieve){
+            Toast.makeText(mContext,"完成",Toast.LENGTH_SHORT).show();
         }
     }
 

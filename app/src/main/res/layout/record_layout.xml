@@ -50,7 +50,7 @@
             app:cd_arc_color="#73fa79"
             app:cd_arc_width="5dp"
             app:cd_bg_color="#ffffff"
-            app:cd_circle_radius="40dp"
+            app:cd_circle_radius="44dp"
             app:cd_location="top"
             app:cd_retreat_type="forward"
             app:cd_text_color="#000000"
@@ -65,6 +65,68 @@
             android:textColor="#4a90e2"
             android:textSize="20dp"/>
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/llNewRecord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="34dp"
+        android:layout_toLeftOf="@id/rlRecord"
+        android:layout_marginRight="40dp"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/iftNewRecord"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:text="重录"
+            android:gravity="center"
+            android:textColor="@drawable/selector_tv_red_enable"
+            android:textSize="16sp"
+            android:background="@drawable/selector_white_circle_enable"/>
+
+        <TextView
+            android:id="@+id/tvNewRecordText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@drawable/selector_tv_white_enable"
+            android:layout_marginTop="14sp"
+            android:text="重录"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llAchieve"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="34dp"
+        android:layout_toRightOf="@id/rlRecord"
+        android:layout_marginLeft="40dp"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/iftAchieve"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:text="完成"
+            android:gravity="center"
+            android:textColor="@drawable/selector_tv_white_enable"
+            android:textSize="16sp"
+            android:background="@drawable/selector_green_circle_enable"/>
+
+        <TextView
+            android:id="@+id/tvAchieveText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@drawable/selector_tv_white_enable"
+            android:layout_marginTop="14sp"
+            android:text="重录"/>
+
+    </LinearLayout>
 
 
     <TextView
