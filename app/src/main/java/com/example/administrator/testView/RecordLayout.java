@@ -11,7 +11,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.administrator.myview.R;
 
@@ -22,21 +21,21 @@ import com.example.administrator.myview.R;
  */
 public class RecordLayout extends RelativeLayout implements onShowRecordStatus, View.OnClickListener {
 
-    private TextView mIftRecordPre;
-    private RelativeLayout mPreLayout;
-    private RelativeLayout mScaleLayout;
+    private TextView mIftRecord;
+    private RelativeLayout mRecordLayout;
     private RelativeLayout mScaleBg;
     private CountDownView mCountRecordView;
-    private RelativeLayout mRlPlay;
     private CountDownView mCountPlayView;
+    private TextView mTvTime;
     private Context mContext;
     private RecordStatus mCurrentStatus = RecordStatus.INITIAL;
 
-    private final int minSec = 5;
-    private final int maxSec = 60;
+    private final int mMinSecond = 5;
+    private final int mMaxSecond = 10;
+    private int mRecordTime;
 
     private enum RecordStatus {
-        INITIAL, PRE, RECORDING, COMPLETE, PLAY
+        INITIAL, PRE, RECORDING,COMPLETE_PRE, COMPLETE, PLAY
     }
 
     public RecordStatus getRecordStatus() {
@@ -77,21 +76,21 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
 
     private void initView() {
         View inflate = LayoutInflater.from(mContext).inflate(R.layout.record_layout, this);
-        mPreLayout = inflate.findViewById(R.id.rlRecordPre);
-        mIftRecordPre = inflate.findViewById(R.id.iftRecordPre);
-        mScaleLayout = inflate.findViewById(R.id.rlScaleLayout);
+        mRecordLayout = inflate.findViewById(R.id.rlRecord);
+        mIftRecord = inflate.findViewById(R.id.iftRecord);
         mScaleBg = inflate.findViewById(R.id.rlScaleBg);
+        mTvTime = inflate.findViewById(R.id.tvTime);
         mCountRecordView = inflate.findViewById(R.id.countDownRecordView);
-        mRlPlay = inflate.findViewById(R.id.rlPlay);
         mCountPlayView = inflate.findViewById(R.id.countDownPlayView);
+        mCountRecordView.setLoadingTime(mMaxSecond);
+        mCountPlayView.setLoadingTime(mMaxSecond);
         showInitial();
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private void initListener() {
-        mRlPlay.setOnClickListener(this);
-        mPreLayout.setOnClickListener(this);
-        mPreLayout.setOnTouchListener(new OnTouchListener() {
+        mRecordLayout.setOnClickListener(this);
+        mRecordLayout.setOnTouchListener(new OnTouchListener() {
             float startX = 0;
             float startY = 0;
             float endX = 0;
@@ -127,11 +126,33 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
             }
         });
 
-        mCountRecordView.setOnLoadingFinishListener(new CountDownView.OnLoadingFinishListener() {
+        mCountRecordView.setOnLoadingFinishListener(new CountDownView.OnRecordFinishListener() {
             @Override
-            public void finish() {
-                //超过时
+            public void finishTime(int time) {//正常时结束录音时间
+                mRecordTime = time;
+                mTvTime.setText(time+"S");
+            }
+
+            @Override
+            public void finishMax() {//到达最大录音时间结束
                 showRecordComplete(true);
+            }
+        });
+
+        mCountPlayView.setPlayListener(new CountDownView.OnPlayListener() {
+            @Override
+            public void startPlayVoice() {//开始录音
+
+            }
+
+            @Override
+            public void playing(int countTime) {//播放录音中
+                mTvTime.setText(countTime+"S");
+            }
+
+            @Override
+            public void playVoiceFinish() {//播放录音结束
+                showPlayResume();
             }
         });
     }
@@ -147,10 +168,11 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
     @Override
     public void showInitial() {
         mCurrentStatus = RecordStatus.INITIAL;
-        mPreLayout.setVisibility(VISIBLE);
-        mScaleLayout.setVisibility(GONE);
-        mCountRecordView.setVisibility(GONE);
+        mRecordLayout.setVisibility(VISIBLE);
+        mCountRecordView.setVisibility(VISIBLE);
+        mCountPlayView.setVisibility(GONE);
         mScaleBg.setVisibility(GONE);
+        mIftRecord.setText("录音");
     }
 
     //原始页面过渡到录音页面
@@ -158,8 +180,6 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
     public synchronized void showPre() {
         if (mCurrentStatus == RecordStatus.INITIAL) {
             mCurrentStatus = RecordStatus.PRE;
-            mPreLayout.setVisibility(INVISIBLE);
-            mScaleLayout.setVisibility(VISIBLE);
             mScaleBg.setVisibility(VISIBLE);
             playRecordAnimator(true);
         }
@@ -171,8 +191,9 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
         if (mCurrentStatus == RecordStatus.PRE) {
             mCurrentStatus = RecordStatus.RECORDING;
             mCountRecordView.setVisibility(VISIBLE);
+            mScaleBg.setVisibility(VISIBLE);
             mCountRecordView.start();
-            Toast.makeText(mContext, "开始录音", Toast.LENGTH_SHORT).show();
+            mIftRecord.setText("录ing");
             if (mOnRecordListener != null) {
                 mOnRecordListener.onStartRecord();
             }
@@ -182,14 +203,16 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
     //从正在录音页面后恢复到原始页面或录音成功页面
     @Override
     public synchronized void showResume() {
+        //触摸按钮但还没进入录音状态
         if (mCurrentStatus == RecordStatus.PRE){
+            mIftRecord.setText("录音");
             mCurrentStatus = RecordStatus.INITIAL;
             playRecordAnimator(false);
             return;
         }
 
         if (mCurrentStatus == RecordStatus.RECORDING) {
-            if (mCountRecordView.getTime() < minSec) {
+            if (mCountRecordView.getTime() < mMinSecond) {
                 showRecordCancel();
             } else {
                 showRecordComplete(false);
@@ -202,10 +225,9 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
     public synchronized void showRecordCancel() {
         if (mCurrentStatus == RecordStatus.RECORDING){
             mCurrentStatus = RecordStatus.INITIAL;
-            mCountRecordView.setVisibility(GONE);
             mCountRecordView.closeAnimator();
             playRecordAnimator(false);
-            Toast.makeText(mContext, "取消录音", Toast.LENGTH_SHORT).show();
+            mIftRecord.setText("录音");
             if (mOnRecordListener != null) {
                 mOnRecordListener.onRecordingCancel();
             }
@@ -216,18 +238,15 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
     @Override
     public synchronized void showRecordComplete(boolean mIsMaxSec) {
         if (mCurrentStatus == RecordStatus.RECORDING) {
-            mCurrentStatus = RecordStatus.COMPLETE;
+            mCurrentStatus = RecordStatus.COMPLETE_PRE;
             playRecordAnimator(false);
-            mCountRecordView.setVisibility(GONE);
             mCountRecordView.closeAnimator();
-            mIftRecordPre.setText("成");
+            mIftRecord.setText("完成");
             if (!mIsMaxSec){
-                Toast.makeText(mContext, "成功", Toast.LENGTH_SHORT).show();
                 if (mOnRecordListener != null) {
                     mOnRecordListener.onFinishRecord();
                 }
             }else {
-                Toast.makeText(mContext, "最大", Toast.LENGTH_SHORT).show();
                 if (mOnRecordListener != null) {
                     mOnRecordListener.onFinishMaxRecord();
                 }
@@ -248,6 +267,8 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
     public synchronized void showPlay() {
         if (mCurrentStatus == RecordStatus.COMPLETE){
             mCurrentStatus = RecordStatus.PLAY;
+            mIftRecord.setText("播放");
+            mCountPlayView.startPlayRecord(mRecordTime);
         }
     }
 
@@ -256,6 +277,9 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
     public synchronized void showPlayResume() {
         if (mCurrentStatus == RecordStatus.PLAY){
             mCurrentStatus = RecordStatus.COMPLETE;
+            mIftRecord.setText("完成");
+            mCountPlayView.closeAnimator();
+            mTvTime.setText(mRecordTime+"S");
         }
     }
 
@@ -283,16 +307,16 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
             if (mAnimSetEnlarge.isRunning()) {
                 ObjectAnimator animator = (ObjectAnimator) mAnimSetEnlarge.getChildAnimations().get(0);
                 float value = (float) animator.getAnimatedValue();
-                animatorX = ObjectAnimator.ofFloat(mScaleLayout, "scaleX", value, 1f);
-                animatorY = ObjectAnimator.ofFloat(mScaleLayout, "scaleY", value, 1f);
+                animatorX = ObjectAnimator.ofFloat(mRecordLayout, "scaleX", value, 1f);
+                animatorY = ObjectAnimator.ofFloat(mRecordLayout, "scaleY", value, 1f);
 
                 animatorBgX = ObjectAnimator.ofFloat(mScaleBg, "scaleX", value * 2, 1f);
                 animatorBgY = ObjectAnimator.ofFloat(mScaleBg, "scaleY", value * 2, 1f);
                 mIsEnlargeSuccess = false;
                 mAnimSetEnlarge.end();
             } else {
-                animatorX = ObjectAnimator.ofFloat(mScaleLayout, "scaleX", 1.5f, 1f);
-                animatorY = ObjectAnimator.ofFloat(mScaleLayout, "scaleY", 1.5f, 1f);
+                animatorX = ObjectAnimator.ofFloat(mRecordLayout, "scaleX", 1.5f, 1f);
+                animatorY = ObjectAnimator.ofFloat(mRecordLayout, "scaleY", 1.5f, 1f);
                 animatorBgX = ObjectAnimator.ofFloat(mScaleBg, "scaleX", 3f, 1f);
                 animatorBgY = ObjectAnimator.ofFloat(mScaleBg, "scaleY", 3f, 1f);
             }
@@ -307,8 +331,8 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
     private void initRecordAnimator() {
         if (mAnimSetEnlarge == null) {
             mAnimSetEnlarge = new AnimatorSet();
-            ObjectAnimator animatorX = ObjectAnimator.ofFloat(mScaleLayout, "scaleX", 1f, 1.5f);
-            ObjectAnimator animatorY = ObjectAnimator.ofFloat(mScaleLayout, "scaleY", 1f, 1.5f);
+            ObjectAnimator animatorX = ObjectAnimator.ofFloat(mRecordLayout, "scaleX", 1f, 1.5f);
+            ObjectAnimator animatorY = ObjectAnimator.ofFloat(mRecordLayout, "scaleY", 1f, 1.5f);
 
             ObjectAnimator animatorBgX = ObjectAnimator.ofFloat(mScaleBg, "scaleX", 1f, 3f);
             ObjectAnimator animatorBgY = ObjectAnimator.ofFloat(mScaleBg, "scaleY", 1f, 3f);
@@ -350,9 +374,15 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
                 @Override
                 public void onAnimationEnd(Animator animator) {
                     mCountRecordView.closeAnimator();
-                    mScaleLayout.setVisibility(GONE);
                     mScaleBg.setVisibility(GONE);
-                    mPreLayout.setVisibility(VISIBLE);
+                    if (mCurrentStatus == RecordStatus.COMPLETE_PRE){
+                        mCountRecordView.setVisibility(GONE);
+                        mCountPlayView.setVisibility(VISIBLE);
+                        mCurrentStatus = RecordStatus.COMPLETE;
+                    }else {
+                        mCountRecordView.setVisibility(VISIBLE);
+                        mCountPlayView.setVisibility(GONE);
+                    }
                 }
 
                 @Override
@@ -371,21 +401,22 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.rlRecordPre){
+        if (id == R.id.rlRecord){
             if (mCurrentStatus == RecordStatus.COMPLETE){
-                Toast.makeText(mContext, "播放", Toast.LENGTH_SHORT).show();
                 showPlay();
+                return;
             }
-        }
-        if (id == R.id.rlPlay){
-            playVoiceAnim();
+            if (mCurrentStatus == RecordStatus.PLAY){
+                showPlayResume();
+                return;
+            }
         }
     }
 
     private void playVoiceAnim() {
         AnimatorSet animatorSet = new AnimatorSet();
-        ObjectAnimator animatorX = ObjectAnimator.ofFloat(mRlPlay, "scaleX", 1f, 1.5f);
-        ObjectAnimator animatorY = ObjectAnimator.ofFloat(mRlPlay, "scaleY", 1f, 1.5f);
+        ObjectAnimator animatorX = ObjectAnimator.ofFloat(mRecordLayout, "scaleX", 1f, 1.5f);
+        ObjectAnimator animatorY = ObjectAnimator.ofFloat(mRecordLayout, "scaleY", 1f, 1.5f);
         animatorSet.playTogether(animatorX,animatorY);
         animatorSet.setDuration(200);
         animatorSet.start();

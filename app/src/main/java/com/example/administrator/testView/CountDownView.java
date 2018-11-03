@@ -147,26 +147,54 @@ public class CountDownView extends View {
         RectF rectF = new RectF(0 + mPaintArcWidth / 2, 0 + mPaintArcWidth / 2
                 , mWidth - mPaintArcWidth / 2, mHeight - mPaintArcWidth / 2);
         canvas.drawArc(rectF, startAngle, mSweepAngle, false, mPaintArc);
-        //画文字
-        String text;
-        if (mTmeModel == 1) {
-            text = mTime + mLoadingTimeUnit;
-        } else {
-            int hour = (int) ((long) mTime / (60 * 60));
-            int min = (int) (((long) mTime / (60)) - hour * 60);
-            int sec = (int) ((long) mTime - hour * 60 * 60 - min * 60);
-            text = String.format("%02d", hour * 60 + min) + ":" + String.format("%02d", sec);
-        }
-        float mTextWidth = mPaintText.measureText(text, 0, text.length());
-        float dx = mWidth / 2 - mTextWidth / 2;
-        Paint.FontMetricsInt fontMetricsInt = mPaintText.getFontMetricsInt();
-        float dy = (fontMetricsInt.bottom - fontMetricsInt.top) / 2 - fontMetricsInt.bottom;
-        float baseLine = mHeight / 2 + dy;
-        text = "录ing";
-        canvas.drawText(text, dx, baseLine, mPaintText);
-
+//        drawTimeText(canvas);
     }
 
+    public void startPlayRecord(int recordTime) {
+        float sweepAngleStart = (float) recordTime / (float) mLoadingTime * mmSweepAngleStart;
+        ValueAnimator animator = ValueAnimator.ofFloat(sweepAngleStart, mmSweepAngleEnd);
+        animator.setInterpolator(new LinearInterpolator());
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                mSweepAngle = (float) valueAnimator.getAnimatedValue();
+                //获取到需要绘制的角度，重新绘制
+                invalidate();
+            }
+        });
+        //这里是时间获取和赋值
+        mTime = 0;
+        ValueAnimator animator1 = ValueAnimator.ofInt(recordTime, 0);
+        animator1.setInterpolator(new LinearInterpolator());
+        animator1.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                mTime = (int) valueAnimator.getAnimatedValue();
+                if (mOnPlayListener !=null){
+                    mOnPlayListener.playing(mTime);
+                }
+            }
+        });
+        mAnimatorSet = new AnimatorSet();
+        mAnimatorSet.playTogether(animator, animator1);
+        mAnimatorSet.setDuration(recordTime * 1000);
+        mAnimatorSet.setInterpolator(new LinearInterpolator());
+        mAnimatorSet.start();
+        mAnimatorSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                if(mOnPlayListener != null){
+                    mOnPlayListener.playVoiceFinish();
+                }
+                clearAnimation();
+
+            }
+        });
+        if(mOnPlayListener != null){
+            mOnPlayListener.startPlayVoice();
+        }
+    }
 
     public void start() {
         ValueAnimator animator = ValueAnimator.ofFloat(mmSweepAngleStart, mmSweepAngleEnd);
@@ -187,8 +215,8 @@ public class CountDownView extends View {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 mTime = (int) valueAnimator.getAnimatedValue();
-                if (loadingFinishListener != null && mTime == mLoadingTime) {
-                    loadingFinishListener.finish();
+                if (mRecordFinishListener != null && mTime == mLoadingTime) {
+                    mRecordFinishListener.finishMax();
                 }
             }
         });
@@ -201,6 +229,10 @@ public class CountDownView extends View {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
+                if (mRecordFinishListener != null) {
+                    mRecordFinishListener.finishTime(mTime);
+                }
+                mTime = 0;
                 clearAnimation();
             }
         });
@@ -220,9 +252,11 @@ public class CountDownView extends View {
         }
     }
 
+
     public void closeAnimator() {
         if (mAnimatorSet != null) {
-            mTime = 0;
+            mSweepAngle = 0;
+            invalidate();
             mAnimatorSet.cancel();
             mAnimatorSet = null;
         }
@@ -232,14 +266,60 @@ public class CountDownView extends View {
         return mTime;
     }
 
-    private OnLoadingFinishListener loadingFinishListener;
-
-    public void setOnLoadingFinishListener(OnLoadingFinishListener listener) {
-        this.loadingFinishListener = listener;
+    public boolean isPlay(){
+        boolean isPlay = false;
+        if (mAnimatorSet!=null && mAnimatorSet.isRunning()){
+            isPlay = true;
+        }
+        return isPlay;
     }
 
-    public interface OnLoadingFinishListener {
-        void finish();
+    private OnRecordFinishListener mRecordFinishListener;
+
+    public void setOnLoadingFinishListener(OnRecordFinishListener listener) {
+        this.mRecordFinishListener = listener;
+    }
+
+    public interface OnRecordFinishListener {
+        //正常时结束录音时间
+        void finishTime(int time);
+
+        //到达最大录音时间结束
+        void finishMax();
+    }
+
+    private OnPlayListener mOnPlayListener;
+
+    public void setPlayListener(OnPlayListener listener) {
+        this.mOnPlayListener = listener;
+    }
+
+    public interface OnPlayListener {
+        void startPlayVoice();
+
+        void playing(int countTime);
+
+        void playVoiceFinish();
+    }
+
+
+    private void drawTimeText(Canvas canvas) {
+        //画文字
+        String text;
+        if (mTmeModel == 1) {
+            text = mTime + mLoadingTimeUnit;
+        } else {
+            int hour = (int) ((long) mTime / (60 * 60));
+            int min = (int) (((long) mTime / (60)) - hour * 60);
+            int sec = (int) ((long) mTime - hour * 60 * 60 - min * 60);
+            text = String.format("%02d", hour * 60 + min) + ":" + String.format("%02d", sec);
+        }
+        float mTextWidth = mPaintText.measureText(text, 0, text.length());
+        float dx = mWidth / 2 - mTextWidth / 2;
+        Paint.FontMetricsInt fontMetricsInt = mPaintText.getFontMetricsInt();
+        float dy = (fontMetricsInt.bottom - fontMetricsInt.top) / 2 - fontMetricsInt.bottom;
+        float baseLine = mHeight / 2 + dy;
+        canvas.drawText(text, dx, baseLine, mPaintText);
     }
 
     /**
