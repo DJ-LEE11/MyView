@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.example.administrator.testView.TestActivity;
 import com.example.administrator.util.IntentUtils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -18,6 +19,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initView() {
         findViewById(R.id.tvBubble).setOnClickListener(this);
         findViewById(R.id.tvCanWave).setOnClickListener(this);
+        findViewById(R.id.tvTest).setOnClickListener(this);
     }
 
     @Override
@@ -28,6 +30,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.tvCanWave:
                 goTo(CanWaveActivity.class);
+                break;
+            case R.id.tvTest:
+                goTo(TestActivity.class);
                 break;
         }
     }

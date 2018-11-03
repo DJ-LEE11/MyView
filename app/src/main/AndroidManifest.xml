@@ -20,6 +20,8 @@
         </activity>
         <activity android:name=".CanWaveActivity">
         </activity>
+        <activity android:name="com.example.administrator.testView.TestActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#63cafe">
+    
+    <RelativeLayout
+        android:id="@+id/rlScaleBg"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/shape_10_white_circle"
+        android:layout_marginBottom="56dp"/>
+
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="56dp"
+        android:background="@drawable/shape_white_circle"
+        android:gravity="center"
+        android:id="@+id/rlScaleLayout">
+
+
+    </RelativeLayout>
+
+    <com.example.administrator.testView.CountDownView
+        android:id="@+id/countDownRecordView"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="36dp"
+        app:cd_animator_time="10"
+        app:cd_animator_time_unit="S"
+        app:cd_arc_color="#73fa79"
+        app:cd_arc_width="5dp"
+        app:cd_bg_color="#ffffff"
+        app:cd_circle_radius="60dp"
+        app:cd_location="top"
+        app:cd_retreat_type="back"
+        app:cd_text_color="#000000"
+        app:cd_text_size="14dp"/>
+
+
+
+    <RelativeLayout
+        android:id="@+id/rlRecordPre"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="56dp"
+        android:background="@drawable/shape_white_circle"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/iftRecordPre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="录"
+            android:textColor="#4a90e2"
+            android:textSize="20dp"/>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rlPlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+        <com.example.administrator.testView.CountDownView
+            android:id="@+id/countDownPlayView"
+            android:visibility="visible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cd_animator_time="10"
+            app:cd_animator_time_unit="S"
+            app:cd_arc_color="#73fa79"
+            app:cd_arc_width="5dp"
+            app:cd_bg_color="#ffffff"
+            app:cd_circle_radius="40dp"
+            app:cd_location="top"
+            app:cd_retreat_type="back"
+            app:cd_text_color="#000000"
+            app:cd_text_size="14dp"/>
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

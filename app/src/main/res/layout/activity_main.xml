@@ -35,6 +35,17 @@
             android:gravity="center"
             android:background="#077ac1"/>
 
+        <TextView
+            android:id="@+id/tvTest"
+            android:layout_width="300dp"
+            android:layout_height="55dp"
+            android:layout_margin="15dp"
+            android:text="测试"
+            android:textColor="#ffffff"
+            android:textSize="16dp"
+            android:gravity="center"
+            android:background="#077ac1"/>
+
     </LinearLayout>
 
 
