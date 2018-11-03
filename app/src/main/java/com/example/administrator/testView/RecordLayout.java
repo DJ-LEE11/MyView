@@ -43,9 +43,10 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
     private final int mMinSecond = 5;
     private final int mMaxSecond = 10;
     private int mRecordTime;
+    private boolean mIsRecordMax;
 
     private enum RecordStatus {
-        INITIAL, PRE, RECORDING,COMPLETE_PRE, COMPLETE, PLAY
+        INITIAL, PRE, RECORDING, COMPLETE_PRE, COMPLETE, PLAY
     }
 
     public RecordStatus getRecordStatus() {
@@ -107,7 +108,6 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
 
     @SuppressLint("ClickableViewAccessibility")
     private void initListener() {
-        mTvTime.setOnClickListener(this);
         mIftNewRecord.setOnClickListener(this);
         mIftAchieve.setOnClickListener(this);
         mRecordLayout.setOnClickListener(this);
@@ -138,7 +138,6 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
                         showResume();
                         break;
                     case MotionEvent.ACTION_CANCEL:
-
                         break;
                     default:
                         break;
@@ -151,11 +150,12 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
             @Override
             public void finishTime(int time) {//正常时结束录音时间
                 mRecordTime = time;
-                mTvTime.setText(time+"S");
+                mTvTime.setText(time + "S");
             }
 
             @Override
             public void finishMax() {//到达最大录音时间结束
+                mIsRecordMax = true;
                 showRecordComplete(true);
             }
         });
@@ -168,7 +168,7 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
 
             @Override
             public void playing(int countTime) {//播放录音中
-                mTvTime.setText(countTime+"S");
+                mTvTime.setText(countTime + "S");
             }
 
             @Override
@@ -193,6 +193,9 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
         mCountRecordView.setVisibility(VISIBLE);
         mCountPlayView.setVisibility(GONE);
         mScaleBg.setVisibility(GONE);
+        playVoiceButtonShow();
+        mRecordTime = 0;
+        mIsRecordMax = false;
         mIftRecord.setText("录音");
     }
 
@@ -225,7 +228,7 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
     @Override
     public synchronized void showResume() {
         //触摸按钮但还没进入录音状态
-        if (mCurrentStatus == RecordStatus.PRE){
+        if (mCurrentStatus == RecordStatus.PRE) {
             mIftRecord.setText("录音");
             mCurrentStatus = RecordStatus.INITIAL;
             playRecordAnimator(false);
@@ -244,7 +247,7 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
     //从正在录音页面后恢复到原始页面
     @Override
     public synchronized void showRecordCancel() {
-        if (mCurrentStatus == RecordStatus.RECORDING){
+        if (mCurrentStatus == RecordStatus.RECORDING) {
             mCurrentStatus = RecordStatus.INITIAL;
             mCountRecordView.closeAnimator();
             playRecordAnimator(false);
@@ -263,11 +266,11 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
             playRecordAnimator(false);
             mCountRecordView.closeAnimator();
             mIftRecord.setText("完成");
-            if (!mIsMaxSec){
+            if (!mIsMaxSec) {
                 if (mOnRecordListener != null) {
                     mOnRecordListener.onFinishRecord();
                 }
-            }else {
+            } else {
                 if (mOnRecordListener != null) {
                     mOnRecordListener.onFinishMaxRecord();
                 }
@@ -278,16 +281,18 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
     //从录音成功页面回到原始成功页面
     @Override
     public synchronized void showRecordCompleteToInitial() {
-        if (mCurrentStatus == RecordStatus.COMPLETE){
+        if (mCurrentStatus == RecordStatus.COMPLETE) {
             mCurrentStatus = RecordStatus.INITIAL;
+            showInitial();
         }
     }
 
     //从录音成功到播放页面
     @Override
     public synchronized void showPlay() {
-        if (mCurrentStatus == RecordStatus.COMPLETE){
+        if (mCurrentStatus == RecordStatus.COMPLETE) {
             mCurrentStatus = RecordStatus.PLAY;
+            playVoiceButtonShow();
             mIftRecord.setText("播放中");
             mCountPlayView.startPlayRecord(mRecordTime);
         }
@@ -296,11 +301,12 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
     //从播放页面回到录音成功
     @Override
     public synchronized void showPlayResume() {
-        if (mCurrentStatus == RecordStatus.PLAY){
+        if (mCurrentStatus == RecordStatus.PLAY) {
             mCurrentStatus = RecordStatus.COMPLETE;
+            playVoiceButtonShow();
             mIftRecord.setText("完成");
             mCountPlayView.closeAnimator();
-            mTvTime.setText(mRecordTime+"S");
+            mTvTime.setText(mRecordTime + "S");
         }
     }
 
@@ -396,11 +402,12 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
                 public void onAnimationEnd(Animator animator) {
                     mCountRecordView.closeAnimator();
                     mScaleBg.setVisibility(GONE);
-                    if (mCurrentStatus == RecordStatus.COMPLETE_PRE){
+                    if (mCurrentStatus == RecordStatus.COMPLETE_PRE) {
                         mCountRecordView.setVisibility(GONE);
                         mCountPlayView.setVisibility(VISIBLE);
                         mCurrentStatus = RecordStatus.COMPLETE;
-                    }else {
+                        playVoiceButtonShow();
+                    } else {
                         mCountRecordView.setVisibility(VISIBLE);
                         mCountPlayView.setVisibility(GONE);
                     }
@@ -419,30 +426,51 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
         }
     }
 
+    private void playVoiceButtonShow() {
+        mLlNewRecord.setVisibility(GONE);
+        mLlAchieve.setVisibility(GONE);
+        switch (mCurrentStatus) {
+            case COMPLETE:
+                mLlNewRecord.setVisibility(VISIBLE);
+                mLlAchieve.setVisibility(VISIBLE);
+                mIftNewRecord.setEnabled(true);
+                mTvNewRecordText.setEnabled(true);
+                mIftAchieve.setEnabled(true);
+                mTvAchieveText.setEnabled(true);
+                break;
+            case PLAY:
+                mLlNewRecord.setVisibility(VISIBLE);
+                mLlAchieve.setVisibility(VISIBLE);
+                mIftNewRecord.setEnabled(false);
+                mTvNewRecordText.setEnabled(false);
+                mIftAchieve.setEnabled(false);
+                mTvAchieveText.setEnabled(false);
+                break;
+        }
+    }
+
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.rlRecord){
-            if (mCurrentStatus == RecordStatus.COMPLETE){
+        if (id == R.id.rlRecord) {
+            if (mIsRecordMax) {//录到最大值完成后，防止手指收起出发播放
+                mIsRecordMax = false;
+                return;
+            }
+            if (mCurrentStatus == RecordStatus.COMPLETE) {
                 showPlay();
                 return;
             }
-            if (mCurrentStatus == RecordStatus.PLAY){
+            if (mCurrentStatus == RecordStatus.PLAY) {
                 showPlayResume();
                 return;
             }
         }
-        if (id == R.id.tvTime){
-            mIftNewRecord.setEnabled(false);
-            mTvNewRecordText.setEnabled(false);
-            mIftAchieve.setEnabled(false);
-            mTvAchieveText.setEnabled(false);
+        if (id == R.id.iftNewRecord) {
+            showRecordCompleteToInitial();
         }
-        if (id == R.id.iftNewRecord){
-            Toast.makeText(mContext,"重录",Toast.LENGTH_SHORT).show();
-        }
-        if (id == R.id.iftAchieve){
-            Toast.makeText(mContext,"完成",Toast.LENGTH_SHORT).show();
+        if (id == R.id.iftAchieve) {
+            Toast.makeText(mContext, "完成", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -450,7 +478,7 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
         AnimatorSet animatorSet = new AnimatorSet();
         ObjectAnimator animatorX = ObjectAnimator.ofFloat(mRecordLayout, "scaleX", 1f, 1.5f);
         ObjectAnimator animatorY = ObjectAnimator.ofFloat(mRecordLayout, "scaleY", 1f, 1.5f);
-        animatorSet.playTogether(animatorX,animatorY);
+        animatorSet.playTogether(animatorX, animatorY);
         animatorSet.setDuration(200);
         animatorSet.start();
         animatorSet.addListener(new Animator.AnimatorListener() {

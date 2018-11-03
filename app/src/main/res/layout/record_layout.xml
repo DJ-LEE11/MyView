@@ -124,7 +124,7 @@
             android:layout_height="wrap_content"
             android:textColor="@drawable/selector_tv_white_enable"
             android:layout_marginTop="14sp"
-            android:text="重录"/>
+            android:text="完成"/>
 
     </LinearLayout>
 
