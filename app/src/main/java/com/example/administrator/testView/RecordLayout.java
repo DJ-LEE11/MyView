@@ -71,7 +71,7 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
 
         void onPlayRecord();
 
-        void onCancelPaly();
+        void onCancelPlay();
 
         void onNewRecord();
 
@@ -180,7 +180,6 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
             @Override
             public void finishTime(int time) {//正常时结束录音时间
                 mRecordTime = time;
-                showPlayTime(time);
             }
 
             @Override
@@ -198,7 +197,7 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
 
             @Override
             public void playing(int countTime) {//播放录音中
-                showPlayTime(countTime);
+                showPlayTime(true, countTime);
             }
 
             @Override
@@ -224,7 +223,7 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
         mTvRecordTip.setVisibility(VISIBLE);
         mCountPlayView.setVisibility(GONE);
         mScaleBg.setVisibility(GONE);
-        mTvTime.setVisibility(GONE);
+        showPlayTime(false, 0);
         mTvRecordMinTip.setVisibility(GONE);
         mTvTestListening.setVisibility(GONE);
         playVoiceButtonShow();
@@ -308,6 +307,7 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
             mTvRecordMinTip.setVisibility(GONE);
             mTvRecordTip.setVisibility(GONE);
             mTvTestListening.setVisibility(VISIBLE);
+            showPlayTime(true, mRecordTime);
             mCountRecordView.closeAnimator();
             mIftRecord.setText("完成");
             if (!mIsMaxSec) {
@@ -359,22 +359,25 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
             mTvTestListening.setVisibility(VISIBLE);
             mIftRecord.setText("完成");
             mCountPlayView.closeAnimator();
-            showPlayTime(mRecordTime);
+            showPlayTime(true, mRecordTime);
             if (mOnRecordListener != null) {
-                mOnRecordListener.onCancelPaly();
+                mOnRecordListener.onCancelPlay();
             }
         }
     }
 
-    private void showPlayTime(int time){
-        int hour = (int) ((long) time / (60 * 60));
-        int min = (int) (((long) time / (60)) - hour * 60);
-        int sec = (int) ((long) time - hour * 60 * 60 - min * 60);
-        String timeText = String.format("%02d", hour * 60 + min) + ":" + String.format("%02d", sec);
-        mTvTime.setVisibility(VISIBLE);
-        mTvTime.setText(timeText);
+    private void showPlayTime(boolean isShow, int time) {
+        if (isShow) {
+            int hour = (int) ((long) time / (60 * 60));
+            int min = (int) (((long) time / (60)) - hour * 60);
+            int sec = (int) ((long) time - hour * 60 * 60 - min * 60);
+            String timeText = String.format("%02d", hour * 60 + min) + ":" + String.format("%02d", sec);
+            mTvTime.setText(timeText);
+            mTvTime.setVisibility(VISIBLE);
+        } else {
+            mTvTime.setVisibility(GONE);
+        }
     }
-
 
     private AnimatorSet mAnimSetEnlarge;
     private AnimatorSet mAnimSetLessen;
