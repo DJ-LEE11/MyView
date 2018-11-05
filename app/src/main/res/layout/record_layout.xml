@@ -93,6 +93,7 @@
             android:layout_height="wrap_content"
             android:textColor="@drawable/selector_tv_white_enable"
             android:layout_marginTop="14sp"
+            android:textSize="11sp"
             android:text="重录"/>
 
     </LinearLayout>
@@ -124,6 +125,7 @@
             android:layout_height="wrap_content"
             android:textColor="@drawable/selector_tv_white_enable"
             android:layout_marginTop="14sp"
+            android:textSize="11sp"
             android:text="完成"/>
 
     </LinearLayout>
@@ -132,9 +134,44 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:textSize="17sp"
         android:id="@+id/tvTime"
-        android:layout_centerInParent="true"
-        android:text="ss"/>
+        android:textColor="#ffffff"
+        android:layout_above="@id/rlRecord"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"/>
+
+    <TextView
+        android:id="@+id/tvTestListening"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="试听"
+        android:layout_alignParentBottom="true"
+        android:textColor="#ffffff"
+        android:layout_centerHorizontal="true"
+        android:textSize="11sp"
+        android:layout_marginBottom="34dp"/>
+
+    <TextView
+        android:id="@+id/tvRecordTip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="请按住录音按钮，贴近手机下方话筒，进行录制"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:textSize="11dp"
+        android:textColor="#7affffff"/>
+
+    <TextView
+        android:id="@+id/tvRecordMinTip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/rlRecord"
+        android:layout_centerHorizontal="true"
+        android:text="录制时间太短，不少于5s"
+        android:textColor="#fdfa01"
+        android:textSize="17dp"
+        android:layout_marginBottom="20dp"/>
 
 </RelativeLayout>
