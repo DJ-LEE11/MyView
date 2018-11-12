@@ -307,8 +307,8 @@ public class RecordLayout extends RelativeLayout implements onShowRecordStatus, 
             mTvRecordMinTip.setVisibility(GONE);
             mTvRecordTip.setVisibility(GONE);
             mTvTestListening.setVisibility(VISIBLE);
-            showPlayTime(true, mRecordTime);
             mCountRecordView.closeAnimator();
+            showPlayTime(true, mRecordTime);
             mIftRecord.setText("完成");
             if (!mIsMaxSec) {
                 if (mOnRecordListener != null) {
