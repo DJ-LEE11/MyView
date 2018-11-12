@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context="com.example.administrator.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,11 +36,11 @@
             android:background="#077ac1"/>
 
         <TextView
-            android:id="@+id/tvTest"
+            android:id="@+id/tvRecordLayout"
             android:layout_width="300dp"
             android:layout_height="55dp"
             android:layout_margin="15dp"
-            android:text="测试"
+            android:text="录音布局"
             android:textColor="#ffffff"
             android:textSize="16dp"
             android:gravity="center"

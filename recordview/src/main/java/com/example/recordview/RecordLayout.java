@@ -1,4 +1,4 @@
-package com.example.administrator.testView;
+package com.example.recordview;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
@@ -13,8 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.administrator.myview.R;
 
 /**
  * @author 李栋杰

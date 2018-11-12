@@ -22,7 +22,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="56dp">
 
-        <com.example.administrator.testView.CountDownView
+        <com.example.recordview.CountDownView
             android:id="@+id/countDownRecordView"
             android:visibility="visible"
             android:layout_width="wrap_content"
@@ -39,7 +39,7 @@
             app:cd_text_color="#000000"
             app:cd_text_size="14dp"/>
 
-        <com.example.administrator.testView.CountDownView
+        <com.example.recordview.CountDownView
             android:id="@+id/countDownPlayView"
             android:visibility="gone"
             android:layout_width="wrap_content"

@@ -1,4 +1,4 @@
-package com.example.administrator.testView;
+package com.example.recordview;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -18,8 +18,6 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
-
-import com.example.administrator.myview.R;
 
 
 public class CountDownView extends View {

@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".MainActivity">
+        <activity android:name="com.example.administrator.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -20,7 +20,7 @@
         </activity>
         <activity android:name=".CanWaveActivity">
         </activity>
-        <activity android:name="com.example.administrator.testView.TestActivity">
+        <activity android:name=".RecordLayoutActivity">
         </activity>
     </application>
 

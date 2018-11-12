@@ -1,4 +1,4 @@
-package com.example.administrator.testView;
+package com.example.recordview;
 
 /**
  * @author 李栋杰
