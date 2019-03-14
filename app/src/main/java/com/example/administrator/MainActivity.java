@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.example.administrator.myview.BubbleActivity;
 import com.example.administrator.myview.CanWaveActivity;
+import com.example.administrator.myview.FloatWindowActivity;
 import com.example.administrator.myview.R;
 import com.example.administrator.myview.RecordLayoutActivity;
 import com.example.administrator.util.IntentUtils;
@@ -23,6 +24,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.tvBubble).setOnClickListener(this);
         findViewById(R.id.tvCanWave).setOnClickListener(this);
         findViewById(R.id.tvRecordLayout).setOnClickListener(this);
+        findViewById(R.id.tvFloatWindow).setOnClickListener(this);
+
     }
 
     @Override
@@ -36,6 +39,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.tvRecordLayout:
                 goTo(RecordLayoutActivity.class);
+                break;
+            case R.id.tvFloatWindow:
+                goTo(FloatWindowActivity.class);
                 break;
         }
     }

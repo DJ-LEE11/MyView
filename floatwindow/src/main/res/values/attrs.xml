@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="FloatWaveView">
+        <attr name="startColor" format="color"/>
+        <attr name="endColor" format="color"/>
+        <attr name="waveAmplitude" format="dimension" />
+        <attr name="waveSpeed" format="float" />
+        <attr name="waveStartPeriod" format="float" />
+        <attr name="waveStart" format="boolean" />
+    </declare-styleable>
+</resources>
