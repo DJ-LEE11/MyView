@@ -43,14 +43,26 @@ public class FloatWindow {
         return mBuilder = new B(applicationContext);
     }
 
-    public static void  hide(){
-        if (mFloatWindow!=null){
+    public static void moveHide() {
+        if (mFloatWindow != null) {
+            mFloatWindow.moveHide();
+        }
+    }
+
+    public static void resumeHide() {
+        if (mFloatWindow != null) {
+            mFloatWindow.resumeHide();
+        }
+    }
+
+    public static void hide() {
+        if (mFloatWindow != null) {
             mFloatWindow.hide();
         }
     }
 
     public static void destroy() {
-        if (mFloatWindow!=null){
+        if (mFloatWindow != null) {
             mFloatWindow.dismiss();
             mFloatWindow = null;
         }

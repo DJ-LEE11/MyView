@@ -15,6 +15,11 @@ public abstract class IFloatWindow {
 
     public abstract void hide();
 
+    public abstract void moveHide();
+
+    public abstract void resumeHide();
+
+
     public abstract boolean isShowing();
 
     public abstract int getX();

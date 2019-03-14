@@ -42,6 +42,7 @@ public class IFloatWindowImpl extends IFloatWindow {
     private float upY;
     private boolean mClick = false;
     private int mSlop;
+    private boolean mIsLocationLeft;
 
     private IFloatWindowImpl() {
 
@@ -52,7 +53,7 @@ public class IFloatWindowImpl extends IFloatWindow {
         mFloatView = new FloatPhone(b.mApplicationContext);
         initTouchEvent();
         mFloatView.setSize(mB.mWidth, mB.mHeight);
-        mFloatView.setGravity(mB.gravity, mB.xOffset, mB.yOffset);
+        mFloatView.setGravity(mB.gravity, Util.getScreenWidth(mB.mApplicationContext) - mB.mWidth - mB.mSlideRightMargin, mB.yOffset);
         mFloatView.setView(mB.mView);
         mFloatLifecycle = new FloatLifecycle(mB.mApplicationContext, mB.mShow, mB.mActivities, new LifecycleListener() {
             @Override
@@ -80,7 +81,7 @@ public class IFloatWindowImpl extends IFloatWindow {
     @Override
     public void show() {
         if (!isShow) {
-            if (!isInit){
+            if (!isInit) {
                 mFloatView.addView();
                 isInit = true;
             }
@@ -106,6 +107,52 @@ public class IFloatWindowImpl extends IFloatWindow {
     }
 
     @Override
+    public void moveHide() {
+        if (!isShow) {
+            return;
+        }
+        if (mIsLocationLeft) {
+            mAnimator = ObjectAnimator.ofInt(0, -mB.mWidth);
+        } else {
+            mAnimator = ObjectAnimator.ofInt(Util.getScreenWidth(mB.mApplicationContext) - mB.mWidth, Util.getScreenWidth(mB.mApplicationContext));
+        }
+        mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int x = (int) animation.getAnimatedValue();
+                mFloatView.updateX(x);
+                if (mB.mViewStateListener != null) {
+                    mB.mViewStateListener.onPositionUpdate(x, (int) upY);
+                }
+            }
+        });
+        startAnimator();
+    }
+
+    @Override
+    public void resumeHide() {
+        if (!isShow) {
+            return;
+        }
+        if (mIsLocationLeft){
+            mAnimator = ObjectAnimator.ofInt(-mB.mWidth,0);
+        }else {
+            mAnimator = ObjectAnimator.ofInt(Util.getScreenWidth(mB.mApplicationContext),Util.getScreenWidth(mB.mApplicationContext) - mB.mWidth);
+        }
+        mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int x = (int) animation.getAnimatedValue();
+                mFloatView.updateX(x);
+                if (mB.mViewStateListener != null) {
+                    mB.mViewStateListener.onPositionUpdate(x, (int) upY);
+                }
+            }
+        });
+        startAnimator();
+    }
+
+    @Override
     public boolean isShowing() {
         return isShow;
     }
@@ -115,7 +162,7 @@ public class IFloatWindowImpl extends IFloatWindow {
         mFloatView.dismiss();
         isShow = false;
         isInit = false;
-        if (mFloatLifecycle != null){
+        if (mFloatLifecycle != null) {
             mFloatLifecycle.destroy();
         }
         if (mB.mViewStateListener != null) {
@@ -225,6 +272,10 @@ public class IFloatWindowImpl extends IFloatWindow {
                                         int endX = (startX * 2 + v.getWidth() > Util.getScreenWidth(mB.mApplicationContext)) ?
                                                 Util.getScreenWidth(mB.mApplicationContext) - v.getWidth() - mB.mSlideRightMargin :
                                                 mB.mSlideLeftMargin;
+                                        mIsLocationLeft = endX == mB.mSlideLeftMargin;
+                                        if (startX == endX) {
+                                            break;
+                                        }
                                         mAnimator = ObjectAnimator.ofInt(startX, endX);
                                         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                                             @Override

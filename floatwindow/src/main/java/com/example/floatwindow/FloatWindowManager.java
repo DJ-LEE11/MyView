@@ -2,6 +2,7 @@ package com.example.floatwindow;
 
 import android.content.Context;
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.Toast;
@@ -28,6 +29,8 @@ public class FloatWindowManager {
     private Context mContext;
     private ViewStateListener mViewStateListener;
     private static volatile FloatWindowManager instance = null;
+    private FloatWindowLayout mFloatWindowLayout;
+    private boolean mIsClick;
 
     private FloatWindowManager(Context context) {
         this.mContext = context;
@@ -49,6 +52,10 @@ public class FloatWindowManager {
         mViewStateListener = new ViewStateListener() {
             @Override
             public void onPositionUpdate(int x, int y) {
+                if (mFloatWindowLayout != null) {
+                    mFloatWindowLayout.setAlpha(0.5f);
+                }
+                Log.v("jie","x=======>"+x);
             }
 
             @Override
@@ -65,10 +72,15 @@ public class FloatWindowManager {
 
             @Override
             public void onMoveAnimStart() {
+                mIsClick = false;
             }
 
             @Override
             public void onMoveAnimEnd() {
+                if (mFloatWindowLayout != null) {
+                    mFloatWindowLayout.setAlpha(1.0f);
+                }
+                mIsClick = true;
             }
 
             @Override
@@ -80,19 +92,21 @@ public class FloatWindowManager {
     public void open() {
         if (hasPermission()) {
             if (FloatWindow.get() == null) {
-                FloatWindowLayout floatWindowLayout = new FloatWindowLayout(mContext);
-                floatWindowLayout.setOnClickListener(new View.OnClickListener() {
+                mFloatWindowLayout = new FloatWindowLayout(mContext);
+                mFloatWindowLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(mContext, "onClick", Toast.LENGTH_SHORT).show();
+                        if (mIsClick){
+                            moveHide();
+                        }
                     }
                 });
 
                 FloatWindow
                         .with(mContext)
-                        .setView(floatWindowLayout)
-                        .setWidth(DisplayUtil.dp2px(mContext,60)) //设置悬浮控件宽高
-                        .setHeight(DisplayUtil.dp2px(mContext,120))
+                        .setView(mFloatWindowLayout)
+                        .setWidth(DisplayUtil.dp2px(mContext, 60)) //设置悬浮控件宽高
+                        .setHeight(DisplayUtil.dp2px(mContext, 120))
                         .setX(Screen.width, 0.83f)
                         .setY(Screen.height, 0.45f)
                         .setMoveType(MoveType.slide, 0, 0)
@@ -101,10 +115,19 @@ public class FloatWindowManager {
                         .setViewStateListener(mViewStateListener)
                         .build();
             }
+            mIsClick = true;
             FloatWindow.get().show();
         } else {
             requestPermission();
         }
+    }
+
+    public void moveHide() {
+        FloatWindow.moveHide();
+    }
+
+    public void resumeHide(){
+        FloatWindow.resumeHide();
     }
 
     public void hide() {
