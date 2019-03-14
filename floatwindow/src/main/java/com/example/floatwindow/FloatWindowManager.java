@@ -93,7 +93,7 @@ public class FloatWindowManager {
                         .setView(floatWindowLayout)
                         .setWidth(DisplayUtil.dp2px(mContext,60)) //设置悬浮控件宽高
                         .setHeight(DisplayUtil.dp2px(mContext,120))
-                        .setX(Screen.width, 0.8f)
+                        .setX(Screen.width, 0.83f)
                         .setY(Screen.height, 0.45f)
                         .setMoveType(MoveType.slide, 0, 0)
                         .setMoveStyle(200, new AccelerateInterpolator())
