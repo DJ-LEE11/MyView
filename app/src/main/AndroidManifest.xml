@@ -24,6 +24,8 @@
         </activity>
         <activity android:name=".FloatWindowActivity">
         </activity>
+        <activity android:name=".RippleActivity">
+        </activity>
     </application>
 
 </manifest>
