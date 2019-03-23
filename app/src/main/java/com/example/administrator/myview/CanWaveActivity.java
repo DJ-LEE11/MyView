@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.example.administrator.util.ButtonUtils;
 import com.example.canwave.CanLayoutView;
 
 public class CanWaveActivity extends AppCompatActivity implements View.OnClickListener {
@@ -23,10 +24,16 @@ public class CanWaveActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tvStart:
+                if (ButtonUtils.isFastDoubleClick(-1,500)){
+                    return;
+                }
                 mCanWave.startAnim();
                 mCanWave.dropCap();
                 break;
             case R.id.tvStop:
+                if (ButtonUtils.isFastDoubleClick()){
+                    return;
+                }
                 mCanWave.stopAnim();
                 mCanWave.riseCap();
                 break;
