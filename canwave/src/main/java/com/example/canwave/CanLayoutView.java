@@ -46,6 +46,7 @@ public class CanLayoutView extends RelativeLayout {
         mMusicNoteView = inflate.findViewById(R.id.musicNoteView);
         mIvCap.setAlpha(0f);
         mCanView.startAnim();
+        mMusicNoteView.startAnimation(0);
     }
 
     public void reset(){

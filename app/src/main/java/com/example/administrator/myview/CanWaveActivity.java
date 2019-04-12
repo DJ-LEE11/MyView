@@ -28,14 +28,14 @@ public class CanWaveActivity extends AppCompatActivity implements View.OnClickLi
                     return;
                 }
                 mCanWave.startAnim();
-                mCanWave.dropCap();
+                mCanWave.riseCap();
                 break;
             case R.id.tvStop:
                 if (ButtonUtils.isFastDoubleClick()){
                     return;
                 }
                 mCanWave.stopAnim();
-                mCanWave.riseCap();
+                mCanWave.dropCap();
                 break;
         }
     }
