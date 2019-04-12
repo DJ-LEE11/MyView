@@ -8,6 +8,21 @@
     android:background="#408cff"
     tools:context=".BubbleActivity">
 
+    <com.example.bubble.wave.MultiWave
+        android:id="@+id/multiWave"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:scaleY="-1"
+        app:mwhCloseColor="#ffffff"
+        app:mwhColorAlpha="0.10"
+        app:mwhGradientAngle="45"
+        app:mwhProgress="1"
+        app:mwhStartColor="#ffffff"
+        app:mwhVelocity="1"
+        app:mwhWaveHeight="50dp"
+        app:mwhWaves="PairWave"/>
+
     <com.example.bubble.BubbleView
         android:id="@+id/bubbleView"
         android:layout_width="match_parent"
