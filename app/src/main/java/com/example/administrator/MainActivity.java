@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.example.administrator.myview.BannerActivity;
 import com.example.administrator.myview.BubbleActivity;
 import com.example.administrator.myview.CanWaveActivity;
 import com.example.administrator.myview.FloatWindowActivity;
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 goTo(TutorialActivity.class);
                 break;
             case R.id.tvBanner:
-                goTo(RippleActivity.class);
+                goTo(BannerActivity.class);
                 break;
         }
     }

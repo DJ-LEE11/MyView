@@ -28,6 +28,8 @@
         </activity>
         <activity android:name=".TutorialActivity">
         </activity>
+        <activity android:name=".BannerActivity">
+        </activity>
     </application>
 
 </manifest>

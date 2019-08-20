@@ -1,1 +1,1 @@
-include ':app', ':bubble', ':canwave', ':recordview', ':floatwindow', ':rippleview', ':tutorialview'
+include ':app', ':bubble', ':canwave', ':recordview', ':floatwindow', ':rippleview', ':tutorialview', ':banner'

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#989efd"
+    tools:context=".BannerActivity">
+
+    <com.example.banner.BannerViewPager
+        android:id="@+id/vBannerViewPager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:banner_isloop="true"
+        app:banner_looptime="3000"
+        app:banner_switchtime="600"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/vBottomWhite"
+        android:layout_marginBottom="40dp"
+        />
+
+
+    <com.example.banner.NormalIndicator
+        android:id="@+id/vIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:normal_dismiss_open="false"
+        app:normal_leftmargin="10dp"
+        app:normal_selector="@drawable/page_white_bottom_selector"
+        app:layout_constraintBottom_toTopOf="@+id/vBottomWhite"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_default="wrap"
+        android:layout_marginBottom="25dp"
+        />
+
+    <View
+        android:id="@+id/vBottomWhite"
+        android:layout_width="match_parent"
+        android:layout_height="175dp"
+        android:background="#ffffff"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+</android.support.constraint.ConstraintLayout>
