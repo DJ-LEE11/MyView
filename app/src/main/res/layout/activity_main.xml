@@ -68,6 +68,28 @@
             android:textSize="16dp"
             android:gravity="center"
             android:background="#077ac1"/>
+
+        <TextView
+            android:id="@+id/tvTutorial"
+            android:layout_width="300dp"
+            android:layout_height="55dp"
+            android:layout_margin="15dp"
+            android:text="引导图"
+            android:textColor="#ffffff"
+            android:textSize="16dp"
+            android:gravity="center"
+            android:background="#077ac1"/>
+
+        <TextView
+            android:id="@+id/tvBanner"
+            android:layout_width="300dp"
+            android:layout_height="55dp"
+            android:layout_margin="15dp"
+            android:text="轮播"
+            android:textColor="#ffffff"
+            android:textSize="16dp"
+            android:gravity="center"
+            android:background="#077ac1"/>
     </LinearLayout>
 
 

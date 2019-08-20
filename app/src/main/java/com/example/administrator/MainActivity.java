@@ -10,6 +10,7 @@ import com.example.administrator.myview.FloatWindowActivity;
 import com.example.administrator.myview.R;
 import com.example.administrator.myview.RecordLayoutActivity;
 import com.example.administrator.myview.RippleActivity;
+import com.example.administrator.myview.TutorialActivity;
 import com.example.administrator.util.IntentUtils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.tvRecordLayout).setOnClickListener(this);
         findViewById(R.id.tvFloatWindow).setOnClickListener(this);
         findViewById(R.id.tvRipple).setOnClickListener(this);
+        findViewById(R.id.tvTutorial).setOnClickListener(this);
+        findViewById(R.id.tvBanner).setOnClickListener(this);
     }
 
     @Override
@@ -45,6 +48,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 goTo(FloatWindowActivity.class);
                 break;
             case R.id.tvRipple:
+                goTo(RippleActivity.class);
+                break;
+            case R.id.tvTutorial:
+                goTo(TutorialActivity.class);
+                break;
+            case R.id.tvBanner:
                 goTo(RippleActivity.class);
                 break;
         }
