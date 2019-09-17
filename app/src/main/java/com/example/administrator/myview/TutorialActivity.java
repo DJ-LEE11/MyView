@@ -2,7 +2,6 @@ package com.example.administrator.myview;
 
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -11,7 +10,7 @@ import com.example.tutorialview.TutorialDelegate;
 
 import static com.example.tutorialview.TutorialDelegate.NEW_GUIDE_TUTORIAL;
 
-public class TutorialActivity extends AppCompatActivity {
+public class TutorialActivity extends BaseActivity {
 
     private ViewGroup mRootView;
     private View tvGuide;

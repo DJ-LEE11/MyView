@@ -1,12 +1,11 @@
 package com.example.administrator.myview;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.example.floatwindow.FloatWindowManager;
 
-public class FloatWindowActivity extends AppCompatActivity {
+public class FloatWindowActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

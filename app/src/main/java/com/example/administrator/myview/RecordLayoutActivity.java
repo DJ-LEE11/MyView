@@ -1,9 +1,8 @@
 package com.example.administrator.myview;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
-public class RecordLayoutActivity extends AppCompatActivity {
+public class RecordLayoutActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,12 +1,11 @@
 package com.example.administrator.myview;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.example.rippleview.RippleView;
 
-public class RippleActivity extends AppCompatActivity {
+public class RippleActivity extends BaseActivity {
 
     private RippleView mRippleView;
 

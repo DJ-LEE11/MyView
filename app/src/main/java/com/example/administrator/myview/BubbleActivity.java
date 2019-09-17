@@ -1,12 +1,11 @@
 package com.example.administrator.myview;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import com.example.bubble.BubbleView;
 import com.example.bubble.wave.MultiWave;
 
-public class BubbleActivity extends AppCompatActivity {
+public class BubbleActivity extends BaseActivity {
 
     private BubbleView mBubbleView;
     private MultiWave mMultiWave;

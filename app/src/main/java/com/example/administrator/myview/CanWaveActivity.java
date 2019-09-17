@@ -1,13 +1,12 @@
 package com.example.administrator.myview;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.example.administrator.util.ButtonUtils;
 import com.example.canwave.CanLayoutView;
 
-public class CanWaveActivity extends AppCompatActivity implements View.OnClickListener {
+public class CanWaveActivity extends BaseActivity implements View.OnClickListener {
 
     private CanLayoutView mCanWave;
 
