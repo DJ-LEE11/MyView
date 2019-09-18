@@ -5,8 +5,6 @@ import android.content.ClipDescription;
 import android.content.ClipboardManager;
 import android.content.Context;
 
-import com.yibasan.lizhifm.sdk.platformtools.ApplicationContext;
-
 /**
  * @author 李栋杰
  * @time 2019/8/28  17:42
@@ -27,11 +25,11 @@ public class ClipboardHelper {
      *
      * @return 单例
      */
-    public static ClipboardHelper getInstance() {
+    public static ClipboardHelper getInstance(Context context) {
         if (mInstance == null) {
             synchronized (ClipboardHelper.class) {
                 if (mInstance == null) {
-                    mInstance = new ClipboardHelper(ApplicationContext.getContext());
+                    mInstance = new ClipboardHelper(context);
                 }
             }
         }
