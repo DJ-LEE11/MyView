@@ -71,7 +71,7 @@ public class ClipboardHelper {
     /**
      * 获取标志
      */
-    public String getLable(){
+    public String getLabel(){
         if (!hasPrimaryClip()) {
             return null;
         }
