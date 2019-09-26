@@ -8,4 +8,19 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+    <style name="Theme.AppCompat.Light.NoActionBar.FullScreen.EntryPoint" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- https://forums.xamarin.com/discussion/119638/splash-screen-using-android-windowbackground-does-goes-behind-statusbar -->
+        <item name="android:background">@drawable/splash_item</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <!--设置内容覆盖-->
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:navigationBarColor">#000000</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <!--Android 5.x开始需要把颜色设置透明，否则导航栏会呈现系统默认的浅灰色-->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <!--<item name="android:windowBackground">@drawable/bg_gradient_blue</item>-->
+    </style>
+
 </resources>
