@@ -12,6 +12,7 @@ import com.example.administrator.myview.R;
 import com.example.administrator.myview.RecordLayoutActivity;
 import com.example.administrator.myview.RippleActivity;
 import com.example.administrator.myview.TutorialActivity;
+import com.example.administrator.util.ExitAppUtils;
 import com.example.administrator.util.IntentUtils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -58,6 +59,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 goTo(BannerActivity.class);
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        ExitAppUtils.exitApp(this);
     }
 
     private void goTo(Class clazz) {
