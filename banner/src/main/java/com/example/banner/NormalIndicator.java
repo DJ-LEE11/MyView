@@ -59,7 +59,7 @@ public class NormalIndicator extends LinearLayout implements ViewPager.OnPageCha
     public void addPagerData(PageBean bean, ViewPager viewPager){
 
         removeAllViews();
-
+        mLastPosition = 0;
         if (bean != null) {
             mCount = bean.datas.size();
             //这里加小圆点
@@ -117,7 +117,6 @@ public class NormalIndicator extends LinearLayout implements ViewPager.OnPageCha
             lastView = getChildAt(mLastPosition);
             if (lastView != null) {
                 lastView.setSelected(false);
-
             }
         }
 

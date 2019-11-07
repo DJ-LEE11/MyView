@@ -9,6 +9,8 @@ public class LoopBean {
     public String des;
     public int res;
 
+    public String target;
+
     private static final int[] RESURL = {
             R.mipmap.ic_loading1,
             R.mipmap.ic_loading2,
